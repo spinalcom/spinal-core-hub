@@ -1,0 +1,11 @@
+{
+  "name": "spinal-core-hub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/spinalhub.sh",
+  "scripts": {
+    "postinstall": "node ./scripts/storehook.js && node ./scripts/postinstall.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
