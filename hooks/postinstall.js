@@ -1,26 +1,26 @@
 /*
-* Copyright 2015 SpinalCom - www.spinalcom.com
-* 
-* This file is part of SpinalCore.
-* 
-* Please read all of the following terms and conditions
-* of the Free Software license Agreement ("Agreement")
-* carefully.
-* 
-* This Agreement is a legally binding contract between
-* the Licensee (as defined below) and SpinalCom that
-* sets forth the terms and conditions that govern your
-* use of the Program. By installing and/or using the
-* Program, you agree to abide by all the terms and
-* conditions stated or referenced herein.
-* 
-* If you do not agree to abide by these terms and
-* conditions, do not demonstrate your acceptance and do
-* not install or use the Program.
-* You should have received a copy of the license along
-* with this file. If not, see
-* <http://resources.spinalcom.com/licenses.pdf>.
-*/
+  * Copyright 2015 SpinalCom - www.spinalcom.com
+  * 
+  * This file is part of SpinalCore.
+  * 
+  * Please read all of the following terms and conditions
+  * of the Free Software license Agreement ("Agreement")
+  * carefully.
+  * 
+  * This Agreement is a legally binding contract between
+  * the Licensee (as defined below) and SpinalCom that
+  * sets forth the terms and conditions that govern your
+  * use of the Program. By installing and/or using the
+  * Program, you agree to abide by all the terms and
+  * conditions stated or referenced herein.
+  * 
+  * If you do not agree to abide by these terms and
+  * conditions, do not demonstrate your acceptance and do
+  * not install or use the Program.
+  * You should have received a copy of the license along
+  * with this file. If not, see
+  * <http://resources.spinalcom.com/licenses.pdf>.
+  */
 
 var fs = require('fs');
 var path = require('path');
@@ -28,10 +28,10 @@ var path = require('path');
 var name = JSON.parse(fs.readFileSync('./package.json', 'utf8')).name;
 var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
 
-var appLaunchPath = '../../.apps.json';
-var configPath = '../../.config.json'
-var browserPath = '../../.browser_organs'
-var defaultConfigPath = "./default_config.json";
+var appLaunchPath = path.resolve('../../.apps.json');
+var configPath = path.resolve('../../.config.json');
+var browserPath = path.resolve('../../.browser_organs');
+var defaultConfigPath = path.resolve('./default_config.json');
 
 console.log('Postinstall script inititated.');
 
@@ -49,13 +49,13 @@ if (isOrgan() || isHub()) {
 
   if (!fs.existsSync(browserPath)) {
     fs.mkdirSync(browserPath);
-    fs.symlinkSync('../.apps.json', browserPath + '/.apps.json');
-    fs.symlinkSync('../.config.json', browserPath + '/.config.json');
+    fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
+    fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
   }
 
   var realName = name.substr('spinal-browser-'.length);
   //fs.symlinkSync('../node_modules/' + name + '/www', browserPath + '/' + realName);
-  copyRecursiveSync('./www', browserPath + '/' + realName)
+  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName))
 }
 
 function createPM2script(defaults = null) {
@@ -193,7 +193,7 @@ function configOrgan() {
   return {
     name: name,
     script: script,
-    cwd: "node_modules/" + name
+    cwd: path.resolve("node_modules/" + name)
   }
 }
 

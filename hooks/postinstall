@@ -1,2 +1,1 @@
-#!/bin/sh
-[ -f ../.hooks/postinstall.js ] && node ../.hooks/postinstall.js || true
+node ../.hooks/postinstall.js

@@ -24,8 +24,17 @@
 
 const fs = require('fs');
 const { exec } = require('child_process');
+const path = require('path');
 
-var hookPath = '../.hooks/postinstall';
+var hookDir = path.resolve('../.hooks/');
+
+var hookPath = {
+  target: path.resolve('../.hooks/postinstall')
+}
+var hookScriptPath = {
+  origin: path.resolve('./hooks/postinstall.js'),
+  target: path.resolve('../.hooks/postinstall.js')
+}
 
 if (!fs.existsSync(hookPath)) { 
   setupHook();
@@ -39,10 +48,22 @@ function setupHook() {
     }
   });
 
-  fs.mkdir('../.hooks/');
-  fs.createReadStream('./hooks/postinstall').pipe(fs.createWriteStream(hookPath));
-  fs.createReadStream('./hooks/postinstall.js').pipe(fs.createWriteStream('../.hooks/postinstall.js'));
-  // TODO: change permissions
-  fs.chmodSync('../.hooks/postinstall', '777');
+  if (!fs.existsSync(hookDir)) { 
+    fs.mkdir(hookDir);
+  }
+
+  let content = 'node ' + hookScriptPath.target;
+
+  fs.writeFile(hookPath.target, content, { flag : 'w' }, function (err) {
+    if (err) return console.log(err);
+
+    //fs.createReadStream(hookPath.origin).pipe(fs.createWriteStream(hookPath.target));
+    fs.createReadStream(hookScriptPath.origin).pipe(fs.createWriteStream(hookScriptPath.target));
+    // TODO: change permissions
+    fs.chmodSync(hookPath.target, '777');
+
+    console.log('New Spinal module installed.');
+  });
+
 }
 

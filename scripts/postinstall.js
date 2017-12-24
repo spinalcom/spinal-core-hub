@@ -22,14 +22,15 @@
 * <http://resources.spinalcom.com/licenses.pdf>.
 */
 
-var fs = require('fs');
+const fs = require('fs'),
+      path = require('path');
 
 var name = JSON.parse(fs.readFileSync('./package.json', 'utf8')).name;
 var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
 
-var nerveCenterPath = '../../nerve-center';
-var rootPath = '../..';
-var browserPath = '../../.browser_organs'
+var nerveCenterPath = path.resolve('../../nerve-center');
+var rootPath = path.resolve('../..');
+var browserPath = path.resolve('../../.browser_organs');
 
 console.log('Postinstall script inititated.');
 
@@ -42,8 +43,8 @@ if (!fs.existsSync(nerveCenterPath)) {
 
 if (!fs.existsSync(browserPath)) {
   fs.mkdirSync(browserPath);
-  fs.symlinkSync('../.apps.json', browserPath + '/.apps.json');
-  fs.symlinkSync('../.config.json', browserPath + '/.config.json');
+  fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
+  fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
 }
 
 function copyBin() {
@@ -55,17 +56,17 @@ function copyBin() {
 
       try {
 
-        let r = fs.createReadStream('./bin/spinalhub.js');
-        r.pipe(fs.createWriteStream(nerveCenterPath + '/spinalhub.js'));
+        let r = fs.createReadStream(path.resolve('./bin/spinalhub.js'));
+        r.pipe(fs.createWriteStream(path.resolve(nerveCenterPath + '/spinalhub.js')));
 
         r.on('end', () => {
           // TODO: change permissions
-          fs.chmodSync(nerveCenterPath + '/spinalhub.js', '777');
+          fs.chmodSync(path.resolve(nerveCenterPath + '/spinalhub.js'), '777');
           res();
         })
 
         //fs.createReadStream('./bin/nerve-center/run.js').pipe(fs.createWriteStream(nerveCenterPath + '/run.js'));
-        fs.createReadStream('./bin/launch.config.js').pipe(fs.createWriteStream(rootPath + '/launch.config.js'));
+        fs.createReadStream(path.resolve('./bin/launch.config.js')).pipe(fs.createWriteStream(path.resolve(rootPath + '/launch.config.js')));
 
       } catch (e) {
         rej(e);

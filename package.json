@@ -7,5 +7,9 @@
     "postinstall": "node ./scripts/storehook.js && node ./scripts/postinstall.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^14.5.0",
+    "deasync": "^0.1.12"
+  }
 }
