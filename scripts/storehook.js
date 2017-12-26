@@ -32,8 +32,8 @@ var hookPath = {
   target: path.resolve('../.hooks/postinstall')
 }
 var hookScriptPath = {
-  origin: path.resolve('./hooks/postinstall.js'),
-  target: path.resolve('../.hooks/postinstall.js')
+  origin: path.resolve('./hooks/run_post.js'),
+  target: path.resolve('../.hooks/run_post.js')
 }
 
 if (!fs.existsSync(hookPath)) { 
