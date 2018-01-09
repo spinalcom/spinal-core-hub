@@ -49,8 +49,8 @@ if (isOrgan() || isHub()) {
   create_browser_folder();
 
   var realName = name.substr('spinal-browser-'.length);
-  fs.symlinkSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
-  // copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName))
+  // fs.symlinkSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
+  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName))
 } else if (isDriveEnv()) {
   create_browser_folder();
 
@@ -272,17 +272,17 @@ function configOrgan() {
   };
 }
 
-// function copyRecursiveSync(src, dest) {
-//   var exists = fs.existsSync(src);
-//   var stats = exists && fs.statSync(src);
-//   var isDirectory = exists && stats.isDirectory();
-//   if (exists && isDirectory) {
-//     fs.mkdirSync(dest);
-//     fs.readdirSync(src).forEach(function (childItemName) {
-//       copyRecursiveSync(path.join(src, childItemName),
-//         path.join(dest, childItemName));
-//     });
-//   } else {
-//     fs.linkSync(src, dest);
-//   }
-// };
+function copyRecursiveSync(src, dest) {
+  var exists = fs.existsSync(src);
+  var stats = exists && fs.statSync(src);
+  var isDirectory = exists && stats.isDirectory();
+  if (exists && isDirectory) {
+    fs.mkdirSync(dest);
+    fs.readdirSync(src).forEach(function (childItemName) {
+      copyRecursiveSync(path.join(src, childItemName),
+        path.join(dest, childItemName));
+    });
+  } else {
+    fs.linkSync(src, dest);
+  }
+}
