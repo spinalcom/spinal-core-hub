@@ -31,6 +31,7 @@ var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
 var appLaunchPath = path.resolve('../../.apps.json');
 var configPath = path.resolve('../../.config.json');
 var browserPath = path.resolve('../../.browser_organs');
+var libPath = path.resolve('./lib.js');
 var defaultConfigPath = path.resolve('./default_config.json');
 
 console.log('Postinstall script inititated.');
@@ -55,7 +56,12 @@ if (isOrgan() || isHub()) {
 
   var realName = name.substr('spinal-browser-'.length);
   //fs.symlinkSync('../node_modules/' + name + '/www', browserPath + '/' + realName);
-  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName))
+  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
+} else if (isLibrary()) {
+  if (fs.existsSync(libPath)) {
+    var realName = name.substr('spinal-lib-'.length);
+    copyRecursiveSync(libPath, path.resolve(browserPath + '/lib/' + realName + '.js'));
+  }
 }
 
 function createPM2script(defaults = null) {
@@ -167,6 +173,10 @@ function writeConfig(config) {
 
   });
 
+}
+
+function isLibrary() {
+  return name.indexOf('spinal-lib') == 0;
 }
 
 function isBrowserOrgan() {
