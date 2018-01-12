@@ -268,7 +268,7 @@ function configOrgan() {
   return {
     name: name,
     script: script,
-    cwd: path.resolve("node_modules/" + name)
+    cwd: path.resolve(".")
   };
 }
 
