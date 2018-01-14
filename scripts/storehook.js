@@ -29,8 +29,10 @@ const path = require('path');
 var hookDir = path.resolve('../.hooks/');
 
 var hookPath = {
+  origin: path.resolve('./hooks/postinstall'),
   target: path.resolve('../.hooks/postinstall')
 }
+
 var hookScriptPath = {
   origin: path.resolve('./hooks/run_post.js'),
   target: path.resolve('../.hooks/run_post.js')
@@ -54,6 +56,13 @@ function setupHook() {
 
   let content = 'node ' + hookScriptPath.target;
 
+  // TODO: hacer esto sync
+
+  copyRecursiveSync(hookScriptPath.origin, hookScriptPath.target);
+  copyRecursiveSync(hookPath.origin, hookPath.target);
+  fs.chmodSync(hookPath.target, '777');
+  console.log('New Spinal module installed.');
+/*
   fs.writeFile(hookPath.target, content, { flag : 'w' }, function (err) {
     if (err) return console.log(err);
 
@@ -62,8 +71,21 @@ function setupHook() {
     // TODO: change permissions
     fs.chmodSync(hookPath.target, '777');
 
-    console.log('New Spinal module installed.');
   });
-
+*/
 }
 
+function copyRecursiveSync(src, dest) {
+  var exists = fs.existsSync(src);
+  var stats = exists && fs.statSync(src);
+  var isDirectory = exists && stats.isDirectory();
+  if (exists && isDirectory) {
+    fs.mkdirSync(dest);
+    fs.readdirSync(src).forEach(function(childItemName) {
+      copyRecursiveSync(path.join(src, childItemName),
+                        path.join(dest, childItemName));
+    });
+  } else {
+    fs.linkSync(src, dest);
+  }
+};
