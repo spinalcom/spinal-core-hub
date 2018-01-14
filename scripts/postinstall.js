@@ -22,70 +22,56 @@
 * <http://resources.spinalcom.com/licenses.pdf>.
 */
 
-const fs = require('fs');
-const { exec } = require('child_process');
-const path = require('path');
+const fs = require('fs'),
+      path = require('path');
 
-var hookDir = path.resolve('../.hooks/');
+var name = JSON.parse(fs.readFileSync('./package.json', 'utf8')).name;
+var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
 
-var hookPath = {
-  origin: path.resolve('./hooks/postinstall'),
-  target: path.resolve('../.hooks/postinstall')
+var nerveCenterPath = path.resolve('../../nerve-center');
+var rootPath = path.resolve('../..');
+var browserPath = path.resolve('../../.browser_organs');
+
+console.log('Postinstall script inititated.');
+
+if (!fs.existsSync(nerveCenterPath)) { 
+  copyBin()
+    .then(() => {
+      console.log('Postinstall script finished.');
+    })
 }
 
-var hookScriptPath = {
-  origin: path.resolve('./hooks/run_post.js'),
-  target: path.resolve('../.hooks/run_post.js')
+if (!fs.existsSync(browserPath)) {
+  fs.mkdirSync(browserPath);
+  fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
+  fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
 }
 
-if (!fs.existsSync(hookPath)) { 
-  setupHook();
-}
+function copyBin() {
 
-function setupHook() {
-  exec('ls', (err, stdout, stderr) => {
-    if (err) {
-      console.error(`exec error: ${err}`);
-      return;
-    }
-  });
+  return new Promise((res, rej) => {
 
-  if (!fs.existsSync(hookDir)) { 
-    fs.mkdir(hookDir);
-  }
+    fs.mkdir(nerveCenterPath, (err) => {
+      if (err) return rej(err);
 
-  let content = 'node ' + hookScriptPath.target;
+      try {
 
-  // TODO: hacer esto sync
+        let r = fs.createReadStream(path.resolve('./bin/spinalhub.js'));
+        r.pipe(fs.createWriteStream(path.resolve(nerveCenterPath + '/spinalhub.js')));
 
-  copyRecursiveSync(hookScriptPath.origin, hookScriptPath.target);
-  copyRecursiveSync(hookPath.origin, hookPath.target);
-  fs.chmodSync(hookPath.target, '777');
-  console.log('New Spinal module installed.');
-/*
-  fs.writeFile(hookPath.target, content, { flag : 'w' }, function (err) {
-    if (err) return console.log(err);
+        r.on('end', () => {
+          // TODO: change permissions
+          fs.chmodSync(path.resolve(nerveCenterPath + '/spinalhub.js'), '777');
+          res();
+        })
 
-    //fs.createReadStream(hookPath.origin).pipe(fs.createWriteStream(hookPath.target));
-    fs.createReadStream(hookScriptPath.origin).pipe(fs.createWriteStream(hookScriptPath.target));
-    // TODO: change permissions
-    fs.chmodSync(hookPath.target, '777');
+        //fs.createReadStream('./bin/nerve-center/run.js').pipe(fs.createWriteStream(nerveCenterPath + '/run.js'));
+        fs.createReadStream(path.resolve('./bin/launch.config.js')).pipe(fs.createWriteStream(path.resolve(rootPath + '/launch.config.js')));
 
-  });
-*/
-}
-
-function copyRecursiveSync(src, dest) {
-  var exists = fs.existsSync(src);
-  var stats = exists && fs.statSync(src);
-  var isDirectory = exists && stats.isDirectory();
-  if (exists && isDirectory) {
-    fs.mkdirSync(dest);
-    fs.readdirSync(src).forEach(function(childItemName) {
-      copyRecursiveSync(path.join(src, childItemName),
-                        path.join(dest, childItemName));
+      } catch (e) {
+        rej(e);
+      }
     });
-  } else {
-    fs.linkSync(src, dest);
-  }
-};
+
+  })
+}
