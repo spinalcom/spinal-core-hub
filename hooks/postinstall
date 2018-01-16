@@ -1,1 +1,1 @@
-node ../.hooks/run_post.js
+[ -e ../.hooks/run_post.js ] && node ../.hooks/run_post.js
