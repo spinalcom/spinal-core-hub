@@ -50,9 +50,14 @@ if (isOrgan() || isHub()) {
 
   var realName = name.substr('spinal-browser-'.length);
   // fs.symlinkSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
-  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName))
+  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
 } else if (isDriveEnv()) {
   create_browser_folder();
+
+  var templatePath = path.resolve('./templates');
+  if (fs.existsSync(templatePath)) {
+    copyRecursiveSync(templatePath, path.resolve(browserPath + '/templates'));
+  }
 
   var addons = [];
   var output_name = path.resolve(browserPath + '/lib/' + "spinal-lib-drive-env.js");
@@ -91,6 +96,7 @@ function create_browser_folder() {
   if (!fs.existsSync(browserPath)) {
     fs.mkdirSync(browserPath);
     fs.mkdirSync(browserPath + "/lib");
+    fs.mkdirSync(browserPath + "/templates");
     fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
     fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
   }
