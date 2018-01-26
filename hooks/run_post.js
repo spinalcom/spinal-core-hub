@@ -51,45 +51,47 @@ if (isOrgan() || isHub()) {
   var realName = name.substr('spinal-browser-'.length);
   // fs.symlinkSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
   copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
-} else if (isDriveEnv()) {
-  create_browser_folder();
-
-  var templatePath = path.resolve('./templates');
-  if (fs.existsSync(templatePath)) {
-    copyRecursiveSync(templatePath, path.resolve(browserPath + '/templates'));
-  }
-
-  var addons = [];
-  var output_name = path.resolve(browserPath + '/lib/' + "spinal-lib-drive-env.js");
-  var output = fs.createWriteStream(output_name);
-  var browserify = require('browserify');
-  var b = browserify({
-    debug: true
-  });
-
-  fs.readdir(path.resolve('..'), function (err, items) {
-    var regex = /spinal-env-drive[-_\w]*/;
-    for (var i = 0; i < items.length; i++) {
-      if (regex.test(items[i])) {
-        addons.push(items[i]);
-      }
-    }
-    if (addons.length) {
-      addons = addons.sort(compare_lib_dependencies);
-      console.log(addons);
-      getsrc_addon(addons, output, b, 0);
-    }
-  });
 }
+//  else if (isDriveEnv()) {
+//   create_browser_folder();
 
-function compare_lib_dependencies(a, b) {
-  var dependencies = require(path.resolve('../' + b + '/package.json')).dependencies;
-  for (var i = 0; i < dependencies.length; i++) {
-    if (dependencies[i] === a)
-      return -1;
-  }
-  return 0;
-}
+//   var templatePath = path.resolve('./templates');
+//   if (fs.existsSync(templatePath)) {
+//     var templatePath = path.resolve('./templates' + name);
+//     copyRecursiveSync(templatePath, path.resolve(browserPath + '/templates/' + name));
+//   }
+
+//   var addons = [];
+//   var output_name = path.resolve(browserPath + '/lib/' + "spinal-lib-drive-env.js");
+//   var output = fs.createWriteStream(output_name);
+//   var browserify = require('browserify');
+//   var b = browserify({
+//     debug: true
+//   });
+
+//   fs.readdir(path.resolve('..'), function (err, items) {
+//     var regex = /spinal-env-drive[-_\w]*/;
+//     for (var i = 0; i < items.length; i++) {
+//       if (regex.test(items[i])) {
+//         addons.push(items[i]);
+//       }
+//     }
+//     if (addons.length) {
+//       addons = addons.sort(compare_lib_dependencies);
+//       console.log(addons);
+//       getsrc_addon(addons, output, b, 0);
+//     }
+//   });
+// }
+
+// function compare_lib_dependencies(a, b) {
+//   var dependencies = require(path.resolve('../' + b + '/package.json')).dependencies;
+//   for (var i = 0; i < dependencies.length; i++) {
+//     if (dependencies[i] === a)
+//       return -1;
+//   }
+//   return 0;
+// }
 
 
 function create_browser_folder() {
@@ -102,22 +104,22 @@ function create_browser_folder() {
   }
 }
 
-function getsrc_addon(addons, output, b, idx) {
-  if (idx >= addons.length) {
-    b.transform("babelify", {
-      presets: ["es2015"]
-    });
-    b.transform("windowify");
-    b.transform("uglifyify");
-    b.bundle().pipe(output);
-    return;
-  }
-  var pack = require(path.resolve('../' + addons[idx] + '/package.json'));
-  for (var i = 0; i < pack.src.length; i++) {
-    b.add(path.resolve('../' + addons[idx] + '/' + pack.src[i]));
-  }
-  getsrc_addon(addons, output, b, ++idx);
-}
+// function getsrc_addon(addons, output, b, idx) {
+//   if (idx >= addons.length) {
+//     b.transform("babelify", {
+//       presets: ["es2015"]
+//     });
+//     b.transform("windowify");
+//     b.transform("uglifyify");
+//     b.bundle().pipe(output);
+//     return;
+//   }
+//   var pack = require(path.resolve('../' + addons[idx] + '/package.json'));
+//   for (var i = 0; i < pack.src.length; i++) {
+//     b.add(path.resolve('../' + addons[idx] + '/' + pack.src[i]));
+//   }
+//   getsrc_addon(addons, output, b, ++idx);
+// }
 
 
 function createPM2script(defaults = null) {
