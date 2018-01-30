@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "",
   "bin": {
-    "spinal-register": "hook/spinal-register.js"
+    "spinal-register": "hooks/spinal-register.js"
   },
   "main": "bin/spinalhub.sh",
   "scripts": {
