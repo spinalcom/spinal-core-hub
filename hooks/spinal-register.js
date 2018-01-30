@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
  * Copyright 2015 SpinalCom - www.spinalcom.com
  * 

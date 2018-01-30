@@ -2,9 +2,14 @@
   "name": "spinal-core-hub",
   "version": "1.1.0",
   "description": "",
+  "bin": {
+    "spinal-register": "hook/spinal-register.js"
+  },
   "main": "bin/spinalhub.sh",
   "scripts": {
-    "postinstall": "node ./scripts/storehook.js && node ./scripts/postinstall.js"
+    "postinstall": "npm run copy-config && npm run spinal-register",
+    "copy-config": "node ./scripts/postinstall.js",
+    "spinal-register": "spinal-register"
   },
   "author": "",
   "license": "ISC",
