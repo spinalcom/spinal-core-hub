@@ -78,6 +78,8 @@ function setupHook() {
 function copyRecursiveSync(src, dest) {
   var exists = fs.existsSync(src);
   var stats = exists && fs.statSync(src);
+  if (fs.existsSync(dest))
+      fs.unlinkSync(dest);
   var isDirectory = exists && stats.isDirectory();
   if (exists && isDirectory) {
     fs.mkdirSync(dest);
