@@ -43,7 +43,11 @@ if (!fs.existsSync(nerveCenterPath)) {
 
 if (!fs.existsSync(browserPath)) {
   fs.mkdirSync(browserPath);
+}
+if (!fs.existsSync(path.resolve(browserPath + '/.apps.json'))) {
   fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
+}
+if (!fs.existsSync(path.resolve(browserPath + '/.config.json'))) {
   fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
 }
 
