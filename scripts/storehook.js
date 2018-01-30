@@ -38,7 +38,7 @@ var hookScriptPath = {
   target: path.resolve('../.hooks/run_post.js')
 }
 
-if (!fs.existsSync(hookPath)) { 
+if (!fs.existsSync(hookPath.target)) { 
   setupHook();
 }
 
