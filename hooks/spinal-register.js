@@ -55,10 +55,7 @@ if (isOrgan() || isHub()) {
   var wwwfolder = path.resolve(modulefolder + '/www')
   var realName = name.substr('spinal-browser-'.length);
   var dist = path.resolve(browserPath + '/' + realName);
-  if (!fs.existsSync(dist)) {
-    fs.symlinkSync(path.relative(wwwfolder, dist), dist);
-  }
-  // copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
+  copyRecursiveSync(wwwfolder, dist);
 }
 //  else if (isDriveEnv()) {
 //   create_browser_folder();
