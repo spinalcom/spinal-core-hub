@@ -28,9 +28,13 @@ const fs = require('fs'),
 var name = JSON.parse(fs.readFileSync('./package.json', 'utf8')).name;
 var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
 
-var nerveCenterPath = path.resolve('../../nerve-center');
 var rootPath = path.resolve('../..');
-var browserPath = path.resolve('../../.browser_organs');
+var nerveCenterPath = path.resolve(rootPath + '/nerve-center');
+var browserPath = path.resolve(rootPath + '/.browser_organs');
+var appDest = path.resolve(browserPath + '/.apps.json');
+var browserconfigDest = path.resolve(browserPath + '/.config.json');
+var appSrc = path.resolve(rootPath + '/.apps.json');
+var browserconfigSrc = path.resolve(rootPath + '/.config.json');
 
 console.log('Postinstall script inititated.');
 
@@ -44,12 +48,13 @@ if (!fs.existsSync(nerveCenterPath)) {
 if (!fs.existsSync(browserPath)) {
   fs.mkdirSync(browserPath);
 }
-if (!fs.existsSync(path.resolve(browserPath + '/.apps.json'))) {
-  fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
+if (!fs.existsSync(appDest)) {
+  fs.symlinkSync(path.relative(appSrc, appDest), appDest);
 }
-if (!fs.existsSync(path.resolve(browserPath + '/.config.json'))) {
-  fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
+if (!fs.existsSync(browserconfigDest)) {
+  fs.symlinkSync(path.relative(browserconfigSrc, browserconfigDest), browserconfigDest);
 }
+
 
 function copyBin() {
 
@@ -69,7 +74,6 @@ function copyBin() {
           res();
         });
 
-        //fs.createReadStream('./bin/nerve-center/run.js').pipe(fs.createWriteStream(nerveCenterPath + '/run.js'));
         fs.createReadStream(path.resolve('./bin/launch.config.js')).pipe(fs.createWriteStream(path.resolve(rootPath + '/launch.config.js')));
 
       } catch (e) {

@@ -27,14 +27,17 @@
 var fs = require('fs');
 var path = require('path');
 
-var name = JSON.parse(fs.readFileSync('./package.json', 'utf8')).name;
-var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
 
-var appLaunchPath = path.resolve('../../.apps.json');
-var configPath = path.resolve('../../.config.json');
-var browserPath = path.resolve('../../.browser_organs');
-var defaultConfigPath = path.resolve('./default_config.json');
+var modulefolder = path.resolve('.');
 
+var name = JSON.parse(fs.readFileSync(modulefolder + '/package.json', 'utf8')).name;
+var script = JSON.parse(fs.readFileSync(modulefolder + '/package.json', 'utf8')).main;
+
+var rootPath = path.resolve(modulefolder + '/../..');
+var appLaunchPath = path.resolve(rootPath + '/.apps.json');
+var configPath = path.resolve(rootPath + '/.config.json');
+var browserPath = path.resolve(rootPath + '/.browser_organs');
+var defaultConfigPath = path.resolve(modulefolder + '/default_config.json');
 console.log('Postinstall script inititated.');
 
 if (isOrgan() || isHub()) {
@@ -49,10 +52,13 @@ if (isOrgan() || isHub()) {
 
 } else if (isBrowserOrgan()) {
   create_browser_folder();
-
+  var wwwfolder = path.resolve(modulefolder + '/www')
   var realName = name.substr('spinal-browser-'.length);
-  // fs.symlinkSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
-  copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
+  var dist = path.resolve(browserPath + '/' + realName);
+  if (!fs.existsSync(dist)) {
+    fs.symlinkSync(path.relative(wwwfolder, dist), dist);
+  }
+  // copyRecursiveSync(path.resolve('./www'), path.resolve(browserPath + '/' + realName));
 }
 //  else if (isDriveEnv()) {
 //   create_browser_folder();
@@ -100,9 +106,16 @@ function create_browser_folder() {
   if (!fs.existsSync(browserPath)) {
     fs.mkdirSync(browserPath);
     fs.mkdirSync(browserPath + "/lib");
-    // fs.mkdirSync(browserPath + "/templates");
-    fs.symlinkSync(path.resolve('../.apps.json'), path.resolve(browserPath + '/.apps.json'));
-    fs.symlinkSync(path.resolve('../.config.json'), path.resolve(browserPath + '/.config.json'));
+    var appDest = path.resolve(browserPath + '/.apps.json');
+    var browserconfigDest = path.resolve(browserPath + '/.config.json');
+    var appSrc = path.resolve(rootPath + '/.apps.json');
+    var browserconfigSrc = path.resolve(rootPath + '/.config.json');
+    if (!fs.existsSync(appDest)) {
+      fs.symlinkSync(path.relative(appSrc, appDest), appDest);
+    }
+    if (!fs.existsSync(browserconfigDest)) {
+      fs.symlinkSync(path.relative(browserconfigSrc, browserconfigDest), browserconfigDest);
+    }
   }
 }
 
