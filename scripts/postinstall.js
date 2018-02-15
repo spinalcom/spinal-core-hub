@@ -49,10 +49,10 @@ if (!fs.existsSync(browserPath)) {
   fs.mkdirSync(browserPath);
 }
 if (!fs.existsSync(appDest)) {
-  fs.symlinkSync(path.relative(appSrc, appDest), appDest);
+  fs.symlinkSync(path.relative(browserPath, appSrc), appDest);
 }
 if (!fs.existsSync(browserconfigDest)) {
-  fs.symlinkSync(path.relative(browserconfigSrc, browserconfigDest), browserconfigDest);
+  fs.symlinkSync(path.relative(browserPath, browserconfigSrc), browserconfigDest);
 }
 
 
