@@ -1,19 +1,13 @@
 const fs = require('fs'),
-  util = require('util'),
-  path = require('path'),
-  browserify = require('browserify');
+      util = require('util'),
+      path = require('path'),
+      browserify = require('browserify');
 
 const appsPath = path.resolve("./.apps.json"),
-  configPath = path.resolve("./.config.json");
+      configPath = path.resolve("./.config.json");
 
-let appsStr = fs.readFileSync(appsPath, {
-  flag: 'r',
-  ecoding: 'utf8'
-});
-let configStr = fs.readFileSync(configPath, {
-  flag: 'r',
-  ecoding: 'utf8'
-});
+let appsStr = fs.readFileSync(appsPath, {flag: 'r', ecoding: 'utf8'});
+let configStr = fs.readFileSync(configPath, {flag: 'r', ecoding: 'utf8'});
 
 let apps = JSON.parse(appsStr.toString());
 let config = JSON.parse(configStr.toString());
@@ -24,7 +18,7 @@ let local = getLocalOrgans();
 setLocalLibs();
 setBrowserOrgans();
 
-for (let i = 0; i < local.length; i++)
+for (let i=0; i < local.length; i++)
   apps.apps.push(local[i]);
 
 setEnv(apps, envs);
@@ -33,9 +27,10 @@ function setEnv(apps, envs) {
 
   let a = Object.keys(apps.apps);
 
-  for (let i = 0; i < a.length; i++) {
+  for (let i=0; i < a.length; i++) {
 
     apps.apps[a[i]] = Object.assign(apps.apps[a[i]], envs);
+    apps.apps[a[i]].name = apps.apps[a[i]].name + '-' + envs.env.SPINALHUB_PORT;
 
   }
 
@@ -52,7 +47,7 @@ function getEnv(config) {
 
   let apps = Object.keys(config);
 
-  for (let i = 0; i < apps.length; i++) {
+  for (let i=0; i < apps.length; i++) {
 
     let a = apps[i];
 
@@ -60,7 +55,7 @@ function getEnv(config) {
 
     console.log(a);
 
-    for (let j = 0; j < envs.length; j++) {
+    for (let j=0; j < envs.length; j++) {
 
       let e = envs[j];
 
@@ -69,7 +64,7 @@ function getEnv(config) {
 
       res[e] = Object.assign(res[e], config[a][e]);
 
-    }
+    }    
 
   }
 
@@ -91,7 +86,7 @@ function getLocalOrgans() {
       script: "index.js",
       cwd: path.resolve(o),
       restart_delay: 1000
-    };
+    }
   });
 
   return localOrgansInfo;
@@ -111,7 +106,7 @@ function setLocalLibs() {
     let libPath = {
       origin: path.resolve('./' + l + '/model.js'),
       target: path.resolve('./.browser_organs/lib/' + name + '.js')
-    };
+    }
 
     // copy model.js in browser organ
     if (fs.existsSync(libPath.target)) {
@@ -134,11 +129,9 @@ function setLocalLibs() {
 
     b.pipe(bundleFs);
 
-    require('deasync').loopWhile(function () {
-      return !done;
-    });
+    require('deasync').loopWhile(function(){return !done;});
 
-    //    while(!continueScript);
+//    while(!continueScript);
 
     //copyRecursiveSync(libPath.origin, libPath.target);
   });
@@ -156,7 +149,7 @@ function setBrowserOrgans() {
     let browserPath = {
       origin: path.resolve('./' + b + '/www'),
       target: path.resolve('./.browser_organs/' + name)
-    };
+    }
 
     // copy www in browser organ
     if (fs.existsSync(browserPath.target)) {
@@ -167,24 +160,24 @@ function setBrowserOrgans() {
 }
 
 
-function copyRecursiveSync(src, dest) {
+function copyRecursiveSync (src, dest) {
   var exists = fs.existsSync(src);
   var stats = exists && fs.statSync(src);
   var isDirectory = exists && stats.isDirectory();
   if (exists && isDirectory) {
     fs.mkdirSync(dest);
-    fs.readdirSync(src).forEach(function (childItemName) {
+    fs.readdirSync(src).forEach(function(childItemName) {
       copyRecursiveSync(path.join(src, childItemName),
-        path.join(dest, childItemName));
+                        path.join(dest, childItemName));
     });
   } else {
     fs.linkSync(src, dest);
   }
-}
+};
 
-function deleteFolderRecursive(path) {
+function deleteFolderRecursive (path) {
   if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function (file, index) {
+    fs.readdirSync(path).forEach(function(file, index){
       var curPath = path + "/" + file;
       if (fs.lstatSync(curPath).isDirectory()) { // recurse
         deleteFolderRecursive(curPath);
@@ -194,6 +187,6 @@ function deleteFolderRecursive(path) {
     });
     fs.rmdirSync(path);
   }
-}
+};
 
 module.exports = apps;
