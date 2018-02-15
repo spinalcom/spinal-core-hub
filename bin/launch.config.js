@@ -30,6 +30,7 @@ function setEnv(apps, envs) {
   for (let i=0; i < a.length; i++) {
 
     apps.apps[a[i]] = Object.assign(apps.apps[a[i]], envs);
+    apps.apps[a[i]].name = apps.apps[a[i]].name + '-' + envs.env.SPINALHUB_PORT;
 
   }
 
