@@ -52,7 +52,7 @@ if (isOrgan() || isHub()) {
 
 } else if (isBrowserOrgan()) {
   create_browser_folder();
-  var wwwfolder = path.resolve(modulefolder + '/www')
+  var wwwfolder = path.resolve(modulefolder + '/www');
   var realName = name.substr('spinal-browser-'.length);
   var dist = path.resolve(browserPath + '/' + realName);
   copyRecursiveSync(wwwfolder, dist);
