@@ -1,21 +1,18 @@
 {
   "name": "spinal-core-hub",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "description": "",
-  "bin": {
-    "spinal-register": "hooks/spinal-register.js"
-  },
   "main": "bin/spinalhub.sh",
   "scripts": {
-    "postinstall": "npm run copy-config && npm run spinal-register",
-    "copy-config": "node ./scripts/postinstall.js",
-    "spinal-register": "spinal-register"
+    "postinstall": "npm run spinal-register",
+    "spinal-register": "spinal-register --spinalhub"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "spinal-core-system":
+      "git+ssh://git@github.com/Sensome/spinal-core-system.git",
     "containerized": "^1.0.2",
-    "browserify": "^14.5.0",
     "deasync": "^0.1.12"
   }
 }
