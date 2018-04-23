@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "spinal-core-system":
-      "git+ssh://git@github.com/Sensome/spinal-core-system.git",
+      "git+https://github.com/spinalcom/spinal-core-system.git",
     "containerized": "^1.0.2",
     "deasync": "^0.1.12"
   }
