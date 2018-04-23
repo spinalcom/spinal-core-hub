@@ -22,27 +22,23 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-const fs = require('fs'),
-  path = require('path');
+const fs = require("fs"),
+  path = require("path");
 
-var name = JSON.parse(fs.readFileSync('./package.json', 'utf8')).name;
-var script = JSON.parse(fs.readFileSync('./package.json', 'utf8')).main;
+var rootPath = path.resolve("../..");
+var nerveCenterPath = path.resolve(rootPath + "/nerve-center");
+var browserPath = path.resolve(rootPath + "/.browser_organs");
+var appDest = path.resolve(browserPath + "/.apps.json");
+var browserconfigDest = path.resolve(browserPath + "/.config.json");
+var appSrc = path.resolve(rootPath + "/.apps.json");
+var browserconfigSrc = path.resolve(rootPath + "/.config.json");
 
-var rootPath = path.resolve('../..');
-var nerveCenterPath = path.resolve(rootPath + '/nerve-center');
-var browserPath = path.resolve(rootPath + '/.browser_organs');
-var appDest = path.resolve(browserPath + '/.apps.json');
-var browserconfigDest = path.resolve(browserPath + '/.config.json');
-var appSrc = path.resolve(rootPath + '/.apps.json');
-var browserconfigSrc = path.resolve(rootPath + '/.config.json');
-
-console.log('Postinstall script inititated.');
+console.log("Postinstall script inititated.");
 
 if (!fs.existsSync(nerveCenterPath)) {
-  copyBin()
-    .then(() => {
-      console.log('Postinstall script finished.');
-    });
+  copyBin().then(() => {
+    console.log("Postinstall script finished.");
+  });
 }
 
 if (!fs.existsSync(browserPath)) {
@@ -52,34 +48,48 @@ if (!fs.existsSync(appDest)) {
   fs.symlinkSync(path.relative(browserPath, appSrc), appDest);
 }
 if (!fs.existsSync(browserconfigDest)) {
-  fs.symlinkSync(path.relative(browserPath, browserconfigSrc), browserconfigDest);
+  fs.symlinkSync(
+    path.relative(browserPath, browserconfigSrc),
+    browserconfigDest
+  );
 }
 
-
 function copyBin() {
-
   return new Promise((res, rej) => {
-
-    fs.mkdir(nerveCenterPath, (err) => {
+    fs.mkdir(nerveCenterPath, err => {
       if (err) return rej(err);
 
       try {
+        let r = fs.createReadStream(path.resolve("./bin/spinalhub.js"));
+        r.pipe(
+          fs.createWriteStream(path.resolve(nerveCenterPath + "/spinalhub.js"))
+        );
 
-        let r = fs.createReadStream(path.resolve('./bin/spinalhub.js'));
-        r.pipe(fs.createWriteStream(path.resolve(nerveCenterPath + '/spinalhub.js')));
-
-        r.on('end', () => {
+        r.on("end", () => {
           // TODO: change permissions
-          fs.chmodSync(path.resolve(nerveCenterPath + '/spinalhub.js'), '777');
+          fs.chmodSync(path.resolve(nerveCenterPath + "/spinalhub.js"), "777");
           res();
         });
 
-        fs.createReadStream(path.resolve('./bin/launch.config.js')).pipe(fs.createWriteStream(path.resolve(rootPath + '/launch.config.js')));
+        let h = fs.createReadStream(path.resolve("./bin/spinalhub"));
+        h.pipe(
+          fs.createWriteStream(path.resolve(nerveCenterPath + "/spinalhub"))
+        );
 
+        h.on("end", () => {
+          // TODO: change permissions
+          fs.chmodSync(path.resolve(nerveCenterPath + "/spinalhub"), "777");
+          res();
+        });
+
+        fs
+          .createReadStream(path.resolve("./bin/launch.config.js"))
+          .pipe(
+            fs.createWriteStream(path.resolve(rootPath + "/launch.config.js"))
+          );
       } catch (e) {
         rej(e);
       }
     });
-
   });
 }
