@@ -1,15 +1,18 @@
 {
   "name": "spinal-core-hub",
-  "version": "1.0.0",
+  "version": "3.0.2",
   "description": "",
   "main": "bin/spinalhub.sh",
   "scripts": {
-    "postinstall": "node ./scripts/storehook.js && node ./scripts/postinstall.js"
+    "postinstall": "npm run spinal-register",
+    "spinal-register": "spinal-register --spinalhub"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "browserify": "^14.5.0",
+    "spinal-core-system":
+      "git+https://github.com/spinalcom/spinal-core-system.git",
+    "containerized": "^1.0.2",
     "deasync": "^0.1.12"
   }
 }
