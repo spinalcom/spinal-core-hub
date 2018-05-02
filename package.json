@@ -1,8 +1,8 @@
 {
   "name": "spinal-core-hub",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "",
-  "main": "bin/spinalhub.sh",
+  "main": "spinalhub.sh",
   "scripts": {
     "postinstall": "npm run spinal-register",
     "spinal-register": "spinal-register --spinalhub"
