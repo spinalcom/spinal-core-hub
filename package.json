@@ -1,6 +1,6 @@
 {
   "name": "spinal-core-hub",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "",
   "main": "spinalhub.js",
   "scripts": {
