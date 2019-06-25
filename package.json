@@ -1,11 +1,12 @@
 {
   "name": "spinal-core-hub",
-  "version": "3.0.5",
+  "version": "3.0.6",
   "description": "",
   "main": "spinalhub.js",
   "scripts": {
     "postinstall": "npm run spinal-register",
-    "spinal-register": "spinal-register --spinalhub"
+    "spinal-register": "spinal-register --spinalhub",
+    "gen-spinal-password": "node ./genDefaultConfig.js"
   },
   "author": "",
   "license": "ISC",
