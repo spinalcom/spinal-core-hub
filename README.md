@@ -23,15 +23,7 @@ Set the Environnement variable to `SPINALHUB_PORT` or use the default config :
   process.env.SPINALHUB_IP = "127.0.0.1";
 ```
 
-The default current version is `spinalhub_freemium_3.0.1_x86_64b`.
-
-# The 3 basic account are :
-
-| Username | Password                             |
-| -------- | ------------------------------------ |
-| admin    | JHGgcz45JKilmzknzelf65ddDadggftIO98P |
-| root     | 4YCSeYUzsDG8XSrjqXgkDPrdmJ3fQqHs     |
-| user     | LQv2nm9G2rqMerk23Tav2ufeuRM2K5RG     |
+The default current version is `spinalhub_freemium_3.0.3_x86_64b`.
 
 ## Spinalhub binary usage
 
