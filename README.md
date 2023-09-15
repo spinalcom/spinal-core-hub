@@ -38,7 +38,7 @@ The default current version is `spinalhub_freemium_3.2.0_x86_64b`.
 
 ## Spinalhub binary usage
 
-````sh
+```sh
 Usage: './spinalhub' [options]
 SpinalHub, the local IoT nerve center
   -v or --verbose: will give more information
@@ -56,5 +56,5 @@ SpinalHub, the local IoT nerve center
   -m or --modify-passwords: modify the passwords
 Unlike normal cron string the 1st number is for the seconds
 <seconds> <minutes> <hours> <days of month> <months> <days of week> <years>
- default is every hours at minute 5```
-````
+ default is every hours at minute 5
+```
