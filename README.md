@@ -23,15 +23,15 @@ Set the Environnement variable to `SPINALHUB_PORT` or use the default config :
   process.env.SPINALHUB_IP = "127.0.0.1";
 ```
 
-It's also posible to configure the organ with a .env file with the following env name :
+It's also posible to configure it with a `.env` file with the following env name :
 
-```
-SPINALHUB_PORT
-SPINAL_PASSWORD
-SPINAL_PASSWORD_ROOT
-SPINAL_PASSWORD_USER
-SPINAL_GARBAGE_COLLECTOR_SCHEDULE
-SPINAL_DUMP_SCHEDULE
+```env
+SPINALHUB_PORT=7777
+SPINAL_PASSWORD="PASSWORD_ADMIN"
+SPINAL_PASSWORD_ROOT="PASSWORD_ROOT"
+SPINAL_PASSWORD_USER="PASSWORD_USER"
+SPINAL_GARBAGE_COLLECTOR_SCHEDULE="0 5 * * * *"
+SPINAL_DUMP_SCHEDULE="0 5 * * * *"
 ```
 
 The default current version is `spinalhub_freemium_3.2.0_x86_64b`.
